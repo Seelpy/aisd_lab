@@ -1,3 +1,12 @@
+/*
+ * Задание:
+ *
+ * ФИО: Веселов Максим Геннадьевич
+ * Группа: ПС-21
+ * Версия c++: 17
+ */
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
