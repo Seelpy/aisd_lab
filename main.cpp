@@ -97,10 +97,39 @@ Coord newCoord(Size size, Coord coord, Power power, Direction direct) {
 int countStrokes(Size size, Power power, Coord mainBall, vector<Coord> balls) {
     queue<Coord> q;
     q.push(mainBall);
+    const int y = size.first;
+    const int x = size.second;
+
+    bool visited[size.first  + 1][size.second + 1];
+    int countBalls = balls.size();
+    bool visitedBalls[balls.size()];
+    int dist[size.first + 1][size.second + 1];
+    visited[mainBall.second][mainBall.second] = true;
+    dist[mainBall.second][mainBall.second] = 1;
 
     while (!q.empty()) {
         auto coord = q.front();
         q.pop();
+        for (int visitedBall= 0; visitedBall < countBalls; visitedBall++) {
+            if (!visitedBalls[visitedBall]) {
+                Coord ball = balls.at(visitedBall);
+                if (isOnDiagonal(size, coord, ball)) {
+                    visitedBalls[visitedBall] = true;
+                    visited[ball.first][ball.second] = true;
+                    q.push(ball);
+                }
+            }
+        }
+        Coord newCoords[4] = { newCoord(size, coord, power, LEFTUP),
+                               newCoord(size, coord, power, LEFTDOWN),
+                               newCoord(size, coord, power, RIGHTUP),
+                               newCoord(size, coord, power, RIGHTDOWN)};
+        for (auto nCord: newCoords) {
+            if (visited[nCord.first][nCord.second]) {
+                visited[nCord.first][nCord.second] = true;
+                q.push(nCord);
+            }
+        }
 
     }
     return 0;
@@ -119,9 +148,9 @@ void run(std::ifstream *in, std::ostream *out) {
         for (int j = 0; j < size.second; j++) {
             *in >> ch;
             if (ch == OTHER_BALL) {
-                balls.emplace_back(i, j);
+                balls.emplace_back(i + 1, j + 1);
             } else if (ch == MAIN_BALL) {
-                mainBall = Coord{i, j};
+                mainBall = Coord{i + 1, j + 1};
             }
         }
     }
