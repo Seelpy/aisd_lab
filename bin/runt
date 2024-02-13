@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./cmake-build-debug/lab ./Tests/$1/i.txt ./Tests/$1/o.txt
